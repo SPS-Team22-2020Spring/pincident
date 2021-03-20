@@ -21,9 +21,11 @@ jobs:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
-    - name: Build Pincident
-      run: mvn -B package --file ./pom.xml
-    - name: Deploy Pincident
-      uses: google-github-actions/deploy-appengine@main
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@master
       with:
-        credentials: ${{ secrets.gcp_credentials }}
+        project_id: ${{ secrets.GCP_PROJECT }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true
+    - name: Deploy Pincident
+      run: mvn package appengine:deploy
