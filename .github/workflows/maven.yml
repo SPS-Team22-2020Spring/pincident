@@ -29,8 +29,4 @@ jobs:
     - name: Build Pincident
       run: mvn -B package --file ./pom.xml
     - name: Deploy Pincident
-      uses: google-github-actions/deploy-appengine@main
-      with:
-        credentials: ${{ secrets.gcp_credentials }}
-        working_directory: ./src/main/appengine
-        project_id: ${{ secrets.GCP_PROJECT }}
+      run: mvn package appengine:deploy
