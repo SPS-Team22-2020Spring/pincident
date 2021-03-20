@@ -33,3 +33,4 @@ jobs:
       with:
         credentials: ${{ secrets.gcp_credentials }}
         working_directory: ./src/main/appengine
+        project_id: ${{ secrets.GCP_PROJECT }}
