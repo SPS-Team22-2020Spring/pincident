@@ -3,4 +3,6 @@
 .settings/
 .theia/
 .vscode/
+.idea/
 target/
+**.iml
