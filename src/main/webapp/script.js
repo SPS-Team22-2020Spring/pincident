@@ -38,5 +38,9 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
     accessToken: 'pk.eyJ1IjoidmFsZW50aW5hc3BzIiwiYSI6ImNrbXFseXo5OTBpaXQycHQ0b2diYWZka2kifQ.Z5CYmHqc3fzrf8z-wxZYrg'
 }).addTo(mymap);
 
-var marker = L.marker([-23.5505, -46.633]).addTo(mymap);
-marker.bindPopup("<b>Hello world!</b><br>This is where Valentina is from!").openPopup();
+var locationscoord = [[-23.5505, -47.103],[-23.5505, -47.213],[-23.5505, -48.323],[-23.5505, -46.433], [-23.5505, -46.543] ]
+var reportcoord = ["20 incidents type: violence","10 incidents type: sexuality","1 incident type: racial","20 incidents type: violence","20 incidents type: violence"]
+for (var i = 0; i < locationscoord.length; i++) {
+   var marker =  L.marker(locationscoord[i]).addTo(mymap);
+   marker.bindPopup(reportcoord[i]).openPopup();
+}

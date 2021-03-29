@@ -1,4 +1,4 @@
-package com.google.sps.servlets;
+/*package com.google.sps.servlets;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.Nullable;
+//import javax.annotation.Nullable;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -143,5 +143,6 @@ public class IndexServlet extends HttpServlet {
 
     resp.setStatus(200);
     resp.getWriter().printf("Vote successfully cast for '%s' at time %s!%n", team, now);
-  }*/
+  }
 }
+*/

@@ -11,7 +11,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import javax.sql.DataSource;
 
-@WebListener("Creates a connection pool that is stored in the Servlet's context for later use.")
+//@WebListener
 public class ConnectionPoolContextListener implements ServletContextListener {
 
   // Saving credentials in environment variables is convenient, but not secure - consider a more
