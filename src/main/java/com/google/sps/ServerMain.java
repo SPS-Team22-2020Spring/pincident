@@ -1,6 +1,8 @@
 package com.google.sps;
 
 import java.net.URL;
+import java.sql.SQLException;
+
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
@@ -13,9 +15,7 @@ import org.eclipse.jetty.webapp.WebInfConfiguration;
  * classes annotated with the @WebServlet annotation.
  */
 public class ServerMain {
-
-  public static void main(final String[] args) throws Exception {
-
+  public static void main(final String[] args) throws Exception, SQLException {
     // Create a server that listens on port 8080.
     final Server server = new Server(8080);
     final WebAppContext webAppContext = new WebAppContext();
