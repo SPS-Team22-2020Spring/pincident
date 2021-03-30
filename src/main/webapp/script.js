@@ -44,14 +44,6 @@ for (var i = 0; i < locationscoord.length; i++) {
    var marker =  L.marker(locationscoord[i]).addTo(mymap);
    marker.bindPopup(reportcoord[i]).openPopup();
 }
-	
-async function getLocations() {
-  const responseFromServer = await fetch('/ls?hi');
-  const stats = await responseFromServer.text();
-  console.log(stats)
-  const statsListElement = document.getElementById('server-stats-container');
-  statsListElement.innerHTML = stats;
-}
 
 /** Creates an <li> element containing text. */
 function createListElement(text) {
