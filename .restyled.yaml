@@ -1,0 +1,29 @@
+enabled: true
+exclude:
+  - "**/*.patch"
+  - "**/node_modules/**/*"
+  - "**/vendor/**/*"
+  - ".github/workflows/**/*"
+commit_template: |
+  Restyled by ${restyler.name}
+restylers:
+  - name: "Google Java"
+  image: 'restyled/restyler-google-java-format:v1.9'
+  command:
+    - google-java-format
+    - '--replace'
+  arguments: []
+  include:
+    - '**/*.java'
+  interpreters: []
+  
+  - name: "Prettier
+  image: 'restyled/restyler-prettier:v2.2.1'
+  command:
+    - prettier
+    - '--write'
+  arguments: []
+  include:
+    - '**/*.js'
+    - '**/*.jsx'
+  interpreters: []
