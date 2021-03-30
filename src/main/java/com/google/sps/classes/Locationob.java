@@ -2,7 +2,7 @@ package com.google.sps.classes;
 
 import com.mysql.cj.jdbc.Blob;
 
-public class location{
+public class Locationob{
 
   private int locationID;
   private String gmapsid;
@@ -12,7 +12,7 @@ public class location{
   private Blob image;
   private int incidentmap;
 
-  public location(int locationID, String gmapsid, double latitude, double longitude, String visualidentifier, Blob image, int incidentmap) {
+  public Locationob(int locationID, String gmapsid, double latitude, double longitude, String visualidentifier, Blob image, int incidentmap) {
     this.locationID = locationID;
     this.gmapsid = gmapsid;
     this.latitude = latitude;

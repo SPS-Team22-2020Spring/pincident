@@ -44,3 +44,30 @@ for (var i = 0; i < locationscoord.length; i++) {
    var marker =  L.marker(locationscoord[i]).addTo(mymap);
    marker.bindPopup(reportcoord[i]).openPopup();
 }
+	
+async function getLocations() {
+  const responseFromServer = await fetch('/ls?hi');
+  const stats = await responseFromServer.text();
+  console.log(stats)
+  const statsListElement = document.getElementById('server-stats-container');
+  statsListElement.innerHTML = stats;
+}
+
+/** Creates an <li> element containing text. */
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
+}
+
+$("#filter").submit(function(e){
+    e.preventDefault();
+    $.ajax({
+        url: 'ls',
+        type: 'POST',
+        data: $("#filter").serialize(),
+        success: function(d) {
+           console.log(d);
+        }
+    })
+});
