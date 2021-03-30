@@ -1,50 +1,61 @@
-package main.java.com.google.sps.classes;
+package com.google.sps.classes;
 
 import java.sql.Date;
 
-public class Incident{
+/**
+ * Class Incident
+ */
+public class Incident {
 
-    private int locationID;
-    private String typeReports;
-    private String note;
-    private Date dateTime;
+    private final int locationID; // LOCATION ID
+    private final String typeReports; // INCIDENT TYPE
+    private final String note; // INCIDENT NOTE
+    private final Date dateTime; // INCIDENT DATE
 
-    public Incident(int locationID, String typeReports, String note, Date dateTime) {
+    /**
+     * Creates a new Object Incident with 4 variables
+     * @param locationID id of the location
+     * @param typeReports type of report
+     * @param note notes
+     * @param dateTime date of the incident
+     */
+    public Incident(int locationID, String typeReports, String note, 
+        Date dateTime) {
         this.locationID = locationID;
         this.typeReports = typeReports;
         this.note = note;
         this.dateTime = dateTime;
     }
 
+    /**
+     * Location ID
+     * @return te location Id
+     */
     public int getLocationID() {
         return locationID;
     }
 
+    /**
+     * TypeReports
+     * @return incident type
+     */
     public String typeReports() {
         return typeReports;
     }
 
+    /**
+     * get Notes
+     * @return incident notes
+     */
     public String getNote() {
         return note;
     }
 
+    /**
+     * incident date
+     * @return incident date
+     */
     public Date getDateTime() {
         return dateTime;
-    }
-
-    public void setLocationid(int locationID) {
-        this.locationID = locationID;
-    }
-
-    public void setTypeReports(String typeReports) {
-        this.typeReports = typeReports;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    public void setDate(Date date) {
-        this.dateTime = date;
     }
 }

@@ -6,26 +6,20 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.gson.Gson;
 import java.io.PrintWriter;
 
-import com.google.sps.classes.Locationob;
-import main.java.com.google.sps.classes.Incident;
-
 @WebServlet("/Cl")
-public class CreateLocation_Report extends HttpServlet {
+public class CreateLocationReport extends HttpServlet {
 	
     private static final long serialVersionUID = 1L;
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-	        throws ServletException, IOException{
-         
+	        throws ServletException, IOException {
         //Data for the new Location object
         String longitude = request.getParameter("longitude");
         String latitude = request.getParameter("latitude");
         String visualidentifier = request.getParameter("visualidentifier");
         int incidentmap = 1;
-        
         //Data for the new Incident object
         String locationid = request.getParameter("locationID");
         String typereports = request.getParameter("typeReports");
@@ -34,11 +28,10 @@ public class CreateLocation_Report extends HttpServlet {
         java.util.Date utilDate = new java.util.Date();
         java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());  
         System.out.println(sqlDate);
-        /*In this part we call the function that executes the query to add a new location
-        and then a report*/
+        /*In this part we call the function that executes the query to 
+        add a new location and then a report*/
         //createNewLocationReport(longitude, latitude, visualidentifier, incidentmap, 
         //locationid, typereports, note, sqlDate);
-
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

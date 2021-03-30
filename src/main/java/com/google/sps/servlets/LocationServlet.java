@@ -1,10 +1,7 @@
 package com.google.sps.servlets;
 
-import java.io.BufferedReader;
 import java.util.Arrays;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.sql.Blob;
 import java.util.LinkedList;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -13,15 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import java.io.PrintWriter;
-import java.io.File;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.google.sps.classes.Article;
 import com.google.sps.classes.Locationob;
 
 @WebServlet("/ls")
