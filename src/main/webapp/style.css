@@ -1,9 +1,21 @@
 #content {
   margin-left: auto;
   margin-right: auto;
-  width: 650px;
+  width: 80%;
 }
 
 #greeting-container {
   margin-top: 20px;
+}
+
+#mapid { height: 400px; }
+
+.map {
+  width: 100%;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+}
+
+.types-incidents li {
+  list-style-type: none;
 }
