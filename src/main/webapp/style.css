@@ -10,12 +10,12 @@
 
 #mapid { height: 400px; }
 
-.map{
+.map {
   width: 100%;
   margin-top: 5rem;
   margin-bottom: 5rem;
 }
 
-.typesIncidents li{
+.types-incidents li {
   list-style-type: none;
 }
