@@ -21,8 +21,8 @@
 }
 
 .incidents-form {
-  margin: 0 auto; 
-  width: 100%; 
+  margin: 0 auto;
+  width: 100%;
   text-align: center;
 }
 
@@ -31,12 +31,12 @@
   margin-bottom: 0.3em;
 }
 
-.form-group{
+.form-group {
   margin-top: 0.7em;
   margin-bottom: 0.7em;
 }
 
-.col-centered{
+.col-centered {
   float: none;
   margin: 0 auto;
 }
