@@ -26,13 +26,6 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
     accessToken: 'pk.eyJ1IjoidmFsZW50aW5hc3BzIiwiYSI6ImNrbXFseXo5OTBpaXQycHQ0b2diYWZka2kifQ.Z5CYmHqc3fzrf8z-wxZYrg'
 }).addTo(mymap);
 
-var locationscoord = [[-23.5505, -47.103],[-23.5505, -47.213],[-23.5505, -48.323],[-23.5505, -46.433], [-23.5505, -46.543] ]
-var reportcoord = ["20 incidents type: violence","10 incidents type: sexuality","1 incident type: racial","20 incidents type: violence","20 incidents type: violence"]
-for (var i = 0; i < locationscoord.length; i++) {
-   var marker =  L.marker(locationscoord[i]).addTo(mymap);
-   marker.bindPopup(reportcoord[i]).openPopup();
-}
-
 /** Creates an <li> element containing text. */
 function createListElement(text) {
   const liElement = document.createElement('li');
@@ -48,9 +41,28 @@ $("#filter").submit(function(e){
         data: $("#filter").serialize(),
         success: function(d) {
            console.log(d);
+           putLocations(d);
         }
     })
 });
+
+function putLocations(data){
+    var locations = [];
+    for(var i = 0; i< data.length; i++){
+        coords = [];
+        for (const property in data[i]) {
+            if(`${property}` == 'latitude' || `${property}` == 'longitude'){
+                coords.push(data[i][property]);
+            }
+        }
+        locations.push(coords);
+    }
+    var reportcoord = ["20 incidents type: violence","10 incidents type: sexuality","1 incident type: racial","20 incidents type: Other","20 incidents type: Uncomfortable"]
+    for (var i = 0; i < locations.length; i++) {
+        var marker =  L.marker(locations[i]).addTo(mymap);
+        marker.bindPopup(reportcoord[i]).openPopup();
+    }
+}
 
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -60,6 +72,3 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
   zoomOffset: -1,
   accessToken: 'pk.eyJ1IjoidmFsZW50aW5hc3BzIiwiYSI6ImNrbXFseXo5OTBpaXQycHQ0b2diYWZka2kifQ.Z5CYmHqc3fzrf8z-wxZYrg'
 }).addTo(mymap)
-
-const marker = L.marker([-23.5505, -46.633]).addTo(mymap)
-marker.bindPopup('<b>Hello world!</b><br>This is where Valentina is from!').openPopup()
