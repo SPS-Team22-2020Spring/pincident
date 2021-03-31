@@ -38,7 +38,7 @@ public final class Locationob {
      * Gets the location ID
      * @return int location ids
      */
-    public final int getLocationID() {
+    public int getLocationID() {
         return locationID;
     }
 
@@ -46,7 +46,7 @@ public final class Locationob {
      * Gets the google maps id
      * @return String maps id
      */
-    public final String getGmapsid() {
+    public String getGmapsid() {
         return gmapsid;
     }
 
@@ -54,7 +54,7 @@ public final class Locationob {
      * Gets the latitude
      * @return Double latitude
      */
-    public final double getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
@@ -62,7 +62,7 @@ public final class Locationob {
      * Gets the longitude
      * @return Double latitude
      */
-    public final double getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
@@ -70,7 +70,7 @@ public final class Locationob {
      * Gets the visual identifier note
      * @return String note
      */
-    public final String getVisualidentifier() {
+    public String getVisualidentifier() {
         return visualidentifier;
     }
 
@@ -78,7 +78,7 @@ public final class Locationob {
      * Gets a blob image
      * @return Blob
      */
-    public final Blob getImage() {
+    public Blob getImage() {
         return image;
     }
 
@@ -86,7 +86,7 @@ public final class Locationob {
      * Gets the number of incidents
      * @return integer of the number of incidents
      */
-    public final int getIncidentmap() {
+    public int getIncidentmap() {
         return incidentmap;
     }
 
