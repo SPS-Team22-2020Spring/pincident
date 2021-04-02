@@ -11,7 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import com.google.sps.MysqlConnector;
 import com.google.sps.classes.Locationob;
+import com.mysql.cj.MysqlConnection;
 
 @WebServlet("/ls")
 public class LocationServlet extends HttpServlet {
@@ -19,7 +26,7 @@ public class LocationServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-	        throws ServletException, IOException{
+	        throws ServletException, IOException, RuntimeException{
 
         List<Locationob> locations = new LinkedList<Locationob>();
         String incidents = request.getParameter("incidents");
@@ -69,13 +76,21 @@ public class LocationServlet extends HttpServlet {
                         //"Select locationID from incidents where typereports = typereports" 
                     }else{
                         //if the user is trolling return all locations
-                        System.out.println("returnAllLocations()");
+                        try{
+                            returnAllLocations();
+                        }catch(Exception e){ 
+                            System.out.println(e);
+                        } 
                     }
                 }
             }
         }else{
             //If both filters are None we return every location
-            System.out.println("returnAllLocations()");
+            try{
+                returnAllLocations();
+            }catch(Exception e){ 
+                System.out.println(e);
+            } 
         }
 
         /////////////////////In this part we need to fetch the locations via database//////////////////////// 
@@ -110,5 +125,20 @@ public class LocationServlet extends HttpServlet {
         boolean yes = Arrays.asList(arr).contains(tocheck);
         return yes;
     }
+
+    public void returnAllLocations() throws SQLException{
+        try{  
+        MysqlConnector conn = new MysqlConnector();
+        Connection connection = conn.startConnection();
+        Statement stmt=connection.createStatement();  
+        ResultSet rs=stmt.executeQuery("select * from locations");  
+        while(rs.next())  
+            System.out.println("LocationID: " + rs.getInt(1)+" GmapsID "+rs.getString(2)+" Latitude: "+rs.getDouble(3)+ " Longitude: " + rs.getDouble(4) + " Visualidentifier: " + rs.getString(5) + " Image: "+ rs.getBlob(6) + " " + rs.getInt(7));  
+        connection.close();  
+        }catch(Exception e){ 
+            System.out.println(e);
+        } 
+    }
 }
+
 

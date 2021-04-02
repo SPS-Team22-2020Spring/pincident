@@ -35,7 +35,12 @@ public class CreateLocationReport extends HttpServlet {
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        out.print("{Works}");
+        out.print("{Works:True}");
         out.flush();   
     }
+    public void createNewLocationReport(double longitude,double latitude,String visualidentifier,int incidentmap){
+        
+    }
 }
+
+
