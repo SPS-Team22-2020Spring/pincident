@@ -1,14 +1,9 @@
 package com.google.sps.configs;
-import com.google.cloud.secretmanager.v1.AccessSecretVersionResponse;
-import com.google.cloud.secretmanager.v1.ProjectName;
-import com.google.cloud.secretmanager.v1.Replication;
-import com.google.cloud.secretmanager.v1.Secret;
-import com.google.cloud.secretmanager.v1.SecretManagerServiceClient;
-import com.google.cloud.secretmanager.v1.SecretPayload;
-import com.google.cloud.secretmanager.v1.SecretVersion;
-import com.google.protobuf.ByteString;
 
-public class SecretManager {
+import com.google.cloud.secretmanager.v1.AccessSecretVersionResponse;
+import com.google.cloud.secretmanager.v1.SecretManagerServiceClient;
+
+public final class SecretManager {
 
   public String getSecret(String secretId) throws Exception {
     // Initialize client that will be used to send requests. This client only needs to be created

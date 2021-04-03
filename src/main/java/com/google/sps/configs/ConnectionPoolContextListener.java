@@ -18,6 +18,7 @@ package com.google.sps.configs;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import java.util.Arrays;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -25,7 +26,7 @@ import javax.servlet.annotation.WebListener;
 import javax.sql.DataSource;
 
 @WebListener("Creates a connection pool that is stored in the Servlet's context for later use.")
-public class ConnectionPoolContextListener implements ServletContextListener {
+public final class ConnectionPoolContextListener implements ServletContextListener {
 
   // Saving credentials in environment variables is convenient, but not secure - consider a more
   // secure solution such as https://cloud.google.com/kms/ to help keep secrets safe.
@@ -35,10 +36,11 @@ public class ConnectionPoolContextListener implements ServletContextListener {
   private static String DB_PASS;
   private static String DB_NAME;
 
-  public ConnectionPoolContextListener() throws Exception{
-    CLOUD_SQL_CONNECTION_NAME = secretManager.getSecret("projects/746439854120/secrets/CLOUD_SQL_CONNECTION_NAME/versions/1");
-    DB_USER = secretManager.getSecret("projects/746439854120/secrets/DB_USER/versions/1");
-    DB_PASS = secretManager.getSecret("projects/746439854120/secrets/DB_PASS/versions/1");
+  public ConnectionPoolContextListener() throws Exception {
+    CLOUD_SQL_CONNECTION_NAME = secretManager
+        .getSecret("projects/746439854120/secrets/CLOUD_SQL_CONNECTION_NAME/versions/1");
+    DB_USER = secretManager.getSecret("projects/746439854120/secrets/DB_USER/versions/2");
+    DB_PASS = secretManager.getSecret("projects/746439854120/secrets/DB_PASS/versions/2");
     DB_NAME = secretManager.getSecret("projects/746439854120/secrets/DB_NAME/versions/1");
   }
 
@@ -72,12 +74,7 @@ public class ConnectionPoolContextListener implements ServletContextListener {
 
     // Initialize the connection pool using the configuration object.
     // [END cloud_sql_mysql_servlet_create]
-    try{
-      return new HikariDataSource(config);
-    } catch (RuntimeException e) {
-      System.out.println(e);
-      throw e;
-    }
+    return new HikariDataSource(config);
   }
 
   @Override
@@ -91,21 +88,17 @@ public class ConnectionPoolContextListener implements ServletContextListener {
 
   @Override
   public void contextInitialized(ServletContextEvent event) {
-    System.out.println("Creating stuff");
     // This function is called when the application starts and will safely create a connection pool
     // that can be used to connect to.
     ServletContext servletContext = event.getServletContext();
     DataSource pool = (DataSource) servletContext.getAttribute("my-pool");
     if (pool == null) {
-      System.out.println("making pool");
       try {
         pool = createConnectionPool();
-      } catch (RuntimeException e){
-        System.out.println(e.toString());
-        throw e;
+      } catch (RuntimeException e) {
+        System.out.println(Arrays.toString(e.getStackTrace()));
       }
       servletContext.setAttribute("my-pool", pool);
-      System.out.println("made");
     }
   }
 }

@@ -32,8 +32,8 @@ public class ServerMain {
 
     // Enable annotations so the server sees classes annotated with @WebServlet.
     webAppContext.setConfigurations(
-        new Configuration[] {
-          new AnnotationConfiguration(), new WebInfConfiguration(),
+        new Configuration[]{
+            new AnnotationConfiguration(), new WebInfConfiguration(),
         });
 
     // Look for annotations in the classes directory (dev server) and in the jar file (live server)
