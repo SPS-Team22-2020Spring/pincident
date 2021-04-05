@@ -55,7 +55,8 @@ function initAutocomplete() {
     }
 
     //if map has geometry fly to it. not working :(
-    var location = [place.geometry.location.lat(), place.geometry.location.lng()]
+    //var location = [place.geometry.location.lat(), place.geometry.location.lng()];
+    location = [15, 15];
     mymap.flyTo(location, 12);
     tempMarker = L.marker(location);
     mymap.addControl(tempMarker);
@@ -66,6 +67,6 @@ function initAutocomplete() {
     }
   });
 }
-function savePlaceData (place) {
-
-}
+//function savePlaceData (place) {
+//
+//}
