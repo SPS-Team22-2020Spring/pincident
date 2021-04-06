@@ -44,8 +44,12 @@ public class CreateReportServlet extends HttpServlet {
                 throws ServletException {
         DataSource pool = (DataSource) request.getServletContext().getAttribute("my-pool");
         try (Connection conn = pool.getConnection()) {
-            String stmt1 = "INSERT INTO incidents values ("+locationID+ "," +typeReports+ ","+note+","+sqlDate+",NULL);";
+            String stmt1 = "INSERT INTO incidents values (?,?,?,?,NULL);";
             try (PreparedStatement repinsertStmt = conn.prepareStatement(stmt1)) {
+                repinsertStmt.setInt(1,locationID);
+                repinsertStmt.setString(2,typeReports);
+                repinsertStmt.setString(3,note);
+                repinsertStmt.setDate(4,sqlDate);
                 ResultSet incidentResults = repinsertStmt.executeQuery();
                 System.out.println(incidentResults);
             }

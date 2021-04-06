@@ -70,6 +70,7 @@ public class LocationsServlet extends HttpServlet {
                 System.out.println(e);
             } 
         }
+        System.out.println(incidents);
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

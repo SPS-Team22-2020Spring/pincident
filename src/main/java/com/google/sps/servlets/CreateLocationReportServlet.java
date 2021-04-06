@@ -50,9 +50,14 @@ public class CreateLocationReportServlet extends HttpServlet {
         Boolean returnBoolean = false;
         DataSource pool = (DataSource) request.getServletContext().getAttribute("my-pool");
         try (Connection conn = pool.getConnection()) {
-            String stmt1 = "INSERT INTO locations values (NULL," +gmapsid+ ","+latitude+","+longitude+","+visualidentifier+",NULL,"+incidentmap+");";
-            String stmt2 = "INSERT INTO incidents values ("+locationID+ "," +typereports+ ","+note+","+sqlDate+",NULL);";
+            String stmt1 = "INSERT INTO locations values (NULL,?,?,?,?,NULL,?);";
+            String stmt2 = "INSERT INTO incidents values (?,?,?,?,NULL);";
             try (PreparedStatement locinsertStmt = conn.prepareStatement(stmt1)) {
+                locinsertStmt.setString(1, gmapsid);
+                locinsertStmt.setDouble(2, latitude);
+                locinsertStmt.setDouble(3, longitude);
+                locinsertStmt.setString(4, visualidentifier);
+                locinsertStmt.setInt(5, incidentmap);
                 ResultSet incidentResults = locinsertStmt.executeQuery();
                 System.out.println(incidentResults);
             }
