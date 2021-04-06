@@ -30,7 +30,7 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 const marker = L.marker([-23.5505, -46.633]).addTo(mymap)
 marker.bindPopup('<b>Hello world!</b><br>This is where Valentina is from!').openPopup()
 
-
+var places = [];
 
 // This example adds a search box to a map, using the Google Place Autocomplete
 // feature. People can enter geographical searches. The search box will return a
@@ -43,30 +43,31 @@ function initAutocomplete() {
     const input = document.getElementById("searchinput");
     //const searchBox = new google.maps.places.SearchBox(input);
     var autocomplete = new google.maps.places.Autocomplete(input);
-    var tempMarker;  
+    var marker;  
     // Listen for the event fired when the user selects a prediction and retrieve
     // more details for that place.
     autocomplete.addListener('place_changed', function() {
-    mymap.removeControl(tempMarker);
+    
     var place = autocomplete.getPlace();
     if (!place.geometry) {
         console.log("Returned place contains no geometry");
         return;
     }
+    
 
     //if map has geometry fly to it. not working :(
-    //var location = [place.geometry.location.lat(), place.geometry.location.lng()];
-    location = [15, 15];
+    var location = [place.geometry.location.lat(), place.geometry.location.lng()];
     mymap.flyTo(location, 12);
-    tempMarker = L.marker(location);
-    mymap.addControl(tempMarker);
+    marker = L.marker(location);
+    mymap.addControl(marker);
     
     if (document.getElementById('form').clicked == true) {
         const place = {"name": place.name, "lat": place.lat, "lng": place.lng, "id": place.place_id};
         savePlaceData(place);
     }
+    //mymap.removeControl(tempMarker);
   });
 }
-//function savePlaceData (place) {
-//
-//}
+function savePlaceData (place) {
+    places.concat(place);
+}
