@@ -29,3 +29,39 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 
 const marker = L.marker([-23.5505, -46.633]).addTo(mymap)
 marker.bindPopup('<b>Hello world!</b><br>This is where Valentina is from!').openPopup()
+
+//DO A POST REQUEST WITHOUT RELOADING THE PAGE 
+//(Kui and valentina check out my form this is how you send the 
+//data into the servlets and wait for a json response that contains 
+//all the objects as json array objects)
+//The putlocations function puts all the points inside the map
+
+$("#filter").submit(function(e){
+    e.preventDefault();
+    $.ajax({
+        url: 'ls',
+        type: 'POST',
+        data: $("#filter").serialize(),
+        success: function(d) {
+           console.log(d);
+           putLocations(d);
+        }
+    })
+});
+
+function putLocations(data){
+    var locations = [];
+    for(var i = 0; i< data.length; i++){
+        coords = [];
+        for (const property in data[i]) {
+            if(`${property}` == 'latitude' || `${property}` == 'longitude'){
+                coords.push(data[i][property]);
+            }
+        }
+        locations.push(coords);
+    }
+    for (var i = 0; i < locations.length; i++) {
+        var marker1 =  L.marker(locations[i]).addTo(mymap);
+        //Here you can add all the info of the reports (later)
+    }
+}

@@ -6,3 +6,4 @@
 .idea/
 target/
 **.iml
+GOOGLE_APPLICATION_CREDENTIALS.json
