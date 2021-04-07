@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>My Portfolio</title>
+    <title>Pincident</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
@@ -33,6 +33,25 @@
         </div>
 
       </div>
+      
+      <!--FILTER AREA-->
+      <div class="row justify-content-center">
+        <form id="filter" method="post" class="col-md-12 justify-content-center incidents-form">
+          <label for="TypeReports">Filter by:</label>
+          <br>
+          <select name="incidents" id="incidents">
+              <optgroup label="Level of Danger">
+              <option value="none">None Selected</option>
+              <option value="all">All reports</option>
+              <option value="warning">1 - 5 reports</option>
+              <option value="danger">5 - 10 reports</option>
+              <option value="dangerous">10 - 20 reports</option>
+              <option value="verydangerous">20 and more reports</option>
+          </select>
+          <br>
+          <input type="submit" value="Filter">
+        </form>
+      </div>
       <div class="row align-items-center justify-content-center">
         <div class="col-sm-12 align-self-center">
           <form class="form-horizontal incidents-form">
@@ -62,22 +81,7 @@
                 </select>
               </div>
             </div>
-            <!--FILTER AREA-->
-            <form id="filter" method="post">
-                <label for="TypeReports">Filter by:</label>
-                <br>
-                <select name="incidents" id="incidents">
-                    <optgroup label="Level of Danger">
-                    <option value="none">None Selected</option>
-                    <option value="all">All reports</option>
-                    <option value="warning">1 - 5 reports</option>
-                    <option value="danger">5 - 10 reports</option>
-                    <option value="dangerous">10 - 20 reports</option>
-                    <option value="verydangerous">20 and more reports</option>
-                </select>
-                <br>
-                <input type="submit" value="Filter">
-            </form>
+            
             <!-- Textarea -->
             <div class="form-group">
               <label class="col-md-4 control-label" for="textarea">Comments/Notes</label>
@@ -90,10 +94,11 @@
             <div class="form-group">
               <label class="col-md-4 control-label" for="form"></label>
               <div class="col-md-4 col-centered">
-                <button id="form" name="form" class="btn btn-success">Drop a Pin!</button>
+                <button id="form" name="form" class="btn btn-success" onclick="sendToPost()">Drop a Pin!</button>
               </div>
             </div>
           </form>
+          <p id="successMessage" class="successmessage">Your pin was added to our database!</p>
             
         </div>
       </div>

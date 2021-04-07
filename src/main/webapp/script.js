@@ -65,3 +65,22 @@ function putLocations(data){
         //Here you can add all the info of the reports (later)
     }
 }
+
+
+function sendToPost(e) {
+  // get places.placeID
+  var locationID = $('#searchinput').val()
+  var typeReports = $( "#select-type-incident option:selected" ).text(); 
+  var note = $('#textarea').val()
+  console.log(locationID,typeReports,note);
+  // const params = new URLSearchParams();
+  // params.append('locationID', task.id);
+  // params.append('typeReports', task.id);
+  // params.append('note', task.id);
+  // fetch('/Cr', {method: 'POST', body: params});
+
+}
+$('#form').on('click', function (e) {
+  e.preventDefault();
+  $('#successMessage').show().delay(5000).fadeOut();
+});
