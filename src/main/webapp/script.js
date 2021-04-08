@@ -59,14 +59,13 @@ function initAutocomplete() {
     if (tempMarker) {
       mymap.removeLayer(tempMarker);
     }
-    //if map has geometry fly to it. not working :(
+    //if map has geometry fly to it
     let location = [place.geometry.location.lat(),
       place.geometry.location.lng()];
     mymap.flyTo(location, 12);
-    marker = L.marker(location).addTo(mymap);
+    tempMarker = L.marker(location).addTo(mymap);
 
     if (document.getElementById('form').clicked == true) {
-        console.log("button was clicked and this place was saved!");
       const place = {
         "name": place.name,
         "lat": place.lat,
@@ -75,7 +74,6 @@ function initAutocomplete() {
       };
       savePlaceData(place);
     }
-    //mymap.removeControl(tempMarker);
   });
 }
 
