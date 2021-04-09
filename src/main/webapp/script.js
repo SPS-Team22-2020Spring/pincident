@@ -32,7 +32,6 @@ L.tileLayer(
 const marker = L.marker([-23.5505, -46.633]).addTo(mymap)
 marker.bindPopup('<b>Hello world!</b><br>This is where Valentina is from!').openPopup()
 
-
 // This example adds a search box to a map, using the Google Place Autocomplete
 // feature. People can enter geographical searches. The search box will return a
 // pick list containing a mix of places and predicted search terms.

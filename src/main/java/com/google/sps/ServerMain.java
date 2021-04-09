@@ -1,9 +1,11 @@
 package com.google.sps;
 
+import com.google.sps.configs.ConnectionPoolContextListener;
 import java.net.URL;
 import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
+import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jetty.webapp.WebInfConfiguration;
@@ -19,6 +21,9 @@ public class ServerMain {
     // Create a server that listens on port 8080.
     final Server server = new Server(8080);
     final WebAppContext webAppContext = new WebAppContext();
+    final ServletContextHandler context = new ServletContextHandler();
+
+    context.addEventListener(new ConnectionPoolContextListener());
     server.setHandler(webAppContext);
 
     // Load static content from inside the jar file.
@@ -27,8 +32,8 @@ public class ServerMain {
 
     // Enable annotations so the server sees classes annotated with @WebServlet.
     webAppContext.setConfigurations(
-        new Configuration[] {
-          new AnnotationConfiguration(), new WebInfConfiguration(),
+        new Configuration[]{
+            new AnnotationConfiguration(), new WebInfConfiguration(),
         });
 
     // Look for annotations in the classes directory (dev server) and in the jar file (live server)
