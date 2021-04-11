@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-/** Handles requests sent to the /hello URL. Try running a server and navigating to /hello! */
+/**
+ * Handles requests sent to the /hello URL. Try running a server and navigating to /hello!
+ */
 @WebServlet("/hello")
 public final class HelloWorldServlet extends HttpServlet {
 

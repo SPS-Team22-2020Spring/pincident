@@ -6,4 +6,5 @@
 .idea/
 target/
 **.iml
+node_modules/
 GOOGLE_APPLICATION_CREDENTIALS.json
