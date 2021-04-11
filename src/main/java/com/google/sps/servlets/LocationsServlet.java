@@ -27,48 +27,36 @@ public class LocationsServlet extends HttpServlet {
       throws ServletException, IOException, RuntimeException {
 
     List<Locationob> locations = new LinkedList<Locationob>();
-    String incidents = request.getParameter("incidents");
+    String incidentsfilter = request.getParameter("incidents");
 
-    if (!incidents.equals("none")) {
-      switch (incidents) {
+    if (!incidentsfilter.equals("none")) {
+      switch (incidentsfilter) {
         case "all":
-          incidents = ">=1";
+          incidentsfilter = ">=1";
           break;
         case "warning":
-          incidents = ">1 AND incidentsmap <=5";
+          incidentsfilter = ">1 AND incidentsmap <=5";
           break;
         case "danger":
-          incidents = ">5 AND incidentsmap <= 10";
+          incidentsfilter = ">5 AND incidentsmap <= 10";
           break;
         case "dangerous":
-          incidents = "> 10 AND incidentsmap <= 20";
+          incidentsfilter = "> 10 AND incidentsmap <= 20";
           break;
         case "verydangerous":
-          incidents = ">20";
+          incidentsfilter = ">20";
           break;
         default:
           //In case someone changes the value in the html no error will appear, instead a list of all locations where incidents > 1
-          incidents = ">=1";
+          incidentsfilter = ">=1";
           break;
       }
       try {
-        //I don't know wich is correct I'll check once the html is ready
-        locations = rstolocobj(returnAllLocationsWhere(request, incidents));
-        //List<Locationob> locations_copy = new LinkedList<Locationob>(rstolocobj(returnAllLocationsWhere(request, incidents)));
-      } catch (Exception e) {
-        System.out.println(e);
-      }
-    } else {
-      //If both filters are None we return every location
-      try {
-        //I don't know wich is correct I'll check once the html is ready
-        locations = rstolocobj(returnAllLocations(request));
-        //List<Locationob> locations_copy = new LinkedList<Locationob>(rstolocobj(returnAllLocations(request)));
+        locations = returnAllLocationsWhere(request, incidentsfilter);
       } catch (Exception e) {
         System.out.println(e);
       }
     }
-    System.out.println(incidents);
     PrintWriter out = response.getWriter();
     response.setContentType("application/json");
     response.setCharacterEncoding("UTF-8");
@@ -76,15 +64,19 @@ public class LocationsServlet extends HttpServlet {
     out.flush();
   }
 
-  public ResultSet returnAllLocationsWhere(HttpServletRequest request, String incidents)
+  public List<Locationob> returnAllLocationsWhere(HttpServletRequest request, String incidents)
       throws SQLException, ServletException {
     DataSource pool = (DataSource) request.getServletContext().getAttribute("my-pool");
-    try (Connection conn = pool.getConnection()) {
-      String stmt1 = "SELECT * FROM LOCATIONS WHERE incidentsmap" + incidents + ";";
+    try (Connection conn = pool.getConnection()){
+      String stmt1 = "SELECT * FROM locations WHERE incidentmap " + incidents + ";";
+      System.out.println(stmt1);
       try (PreparedStatement getalllocationswhere = conn.prepareStatement(stmt1)) {
         ResultSet locations = getalllocationswhere.executeQuery();
-        System.out.println(locations);
-        return locations;
+        List<Locationob> loc = rstolocobj(locations);
+        return loc;
+      }catch (SQLException ex) {
+      throw new ServletException(
+          "Query failed", ex);
       }
     } catch (SQLException ex) {
       throw new ServletException(
@@ -92,15 +84,15 @@ public class LocationsServlet extends HttpServlet {
     }
   }
 
-  public ResultSet returnAllLocations(HttpServletRequest request)
+  public List<Locationob> returnAllLocations(HttpServletRequest request)
       throws SQLException, ServletException {
     DataSource pool = (DataSource) request.getServletContext().getAttribute("my-pool");
     try (Connection conn = pool.getConnection()) {
       String stmt1 = "SELECT * FROM LOCATIONS";
       try (PreparedStatement getalllocations = conn.prepareStatement(stmt1)) {
         ResultSet locations = getalllocations.executeQuery();
-        System.out.println(locations);
-        return locations;
+        List<Locationob> loc = rstolocobj(locations);
+        return loc;
       }
     } catch (SQLException ex) {
       throw new ServletException(
@@ -123,11 +115,6 @@ public class LocationsServlet extends HttpServlet {
             Image,
             Incidentsmap);
         locs.add(loc);
-        System.out
-            .println("LocationID: " + LocationID + " GmapsID " + GmapsID + " Latitude: " + Latitude
-                + " Longitude: " + Longitude + " Visualidentifier: " + Visualidentifier + " Image: "
-                + Image
-                + " " + Incidentsmap);
       }
     } catch (Exception e) {
       System.out.println(e);

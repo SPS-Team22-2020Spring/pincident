@@ -16,7 +16,7 @@
  * Adds a random greeting to the page.
  */
 
-const mymap = L.map('mapid').setView([-23.5505, -46.6333], 3)
+const mymap = L.map('mapid').setView([0, 0], 2)
 var GmapsID;
 var placeInternal;
 
@@ -31,10 +31,7 @@ L.tileLayer(
       accessToken: 'pk.eyJ1IjoidmFsZW50aW5hc3BzIiwiYSI6ImNrbXFseXo5OTBpaXQycHQ0b2diYWZka2kifQ.Z5CYmHqc3fzrf8z-wxZYrg'
     }).addTo(mymap)
 
-const marker = L.marker([-23.5505, -46.633]).addTo(mymap)
-marker.bindPopup(
-    '<b>Hello world!</b><br>This is where Valentina is from!').openPopup()
-
+var markers = L.markerClusterGroup();
 // This example adds a search box to a map, using the Google Place Autocomplete
 // feature. People can enter geographical searches. The search box will return a
 // pick list containing a mix of places and predicted search terms.
@@ -110,33 +107,61 @@ async function saveIncidentData(locationID, typeReport, note) {
   }
 
 $("#filter").submit(function (e) {
-  e.preventDefault();
-  $.ajax({
-    url: 'ls',
-    type: 'POST',
-    data: $("#filter").serialize(),
-    success: function (d) {
-      console.log(d);
-      putLocations(d);
-    }
-  })
+    e.preventDefault();
+    $.ajax({
+        url: 'ls',
+        type: 'POST',
+        data: $("#filter").serialize(),
+        success: function (d) {
+            console.log(d);
+            putLocations(d);
+        }
+    })
 });
 
+//delete(nxt);
+
 function putLocations(data) {
-  var locations = [];
-  for (var i = 0; i < data.length; i++) {
-    coords = [];
-    for (const property in data[i]) {
-      if (`${property}` == 'latitude' || `${property}` == 'longitude') {
-        coords.push(data[i][property]);
-      }
+    markers.clearLayers();
+    var locations = [];
+    var locationIDs = [];
+    var gmapsIDs = [];
+    var visualidentifiers = [];
+    var incidentmaps = [];
+    for (var i = 0; i < data.length; i++) {
+        var coords = [];
+        for (const property in data[i]) {
+            switch(property){
+                case "locationID":
+                    locationIDs.push(data[i][property]);
+                break;
+                case "latitude":
+                case "longitude":
+                    coords.push(data[i][property]);
+                break;
+                case "gmapsid":
+                    gmapsIDs.push(data[i][property]);
+                break;
+                case "visualidentifier":
+                    visualidentifiers.push(data[i][property]);
+                break;
+                case "incidentmap":
+                    incidentmaps.push(data[i][property]);
+                break;
+                default:
+                break;
+            }
+        }
+        console.log(coords);
+        locations.push(coords);
     }
-    locations.push(coords);
-  }
-  for (var i = 0; i < locations.length; i++) {
-    var marker1 = L.marker(locations[i]).addTo(mymap);
-    //Here you can add all the info of the reports (later)
-  }
+    for (var i = 0; i < locations.length; i++) {
+        var marker = L.marker(locations[i]);
+        marker.bindPopup(
+            '<b>'+visualidentifiers[i]+'</b><br>'+locationIDs[i]).openPopup();
+        markers.addLayer(marker);
+    }
+    mymap.addLayer(markers);
 }
 
 async function sendToPost(e) {
