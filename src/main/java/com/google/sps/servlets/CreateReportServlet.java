@@ -21,6 +21,7 @@ public class CreateReportServlet extends HttpServlet {
   protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
       throws ServletException, IOException {
     //Data for the new Location object
+    System.out.println("Entered post");
     //We fetch this id when clicking on the pin
     int locationID = Integer.valueOf(request.getParameter("locationID"));
     String typeReports = request.getParameter("typeReports");
@@ -49,8 +50,7 @@ public class CreateReportServlet extends HttpServlet {
         repinsertStmt.setString(2, typeReports);
         repinsertStmt.setString(3, note);
         repinsertStmt.setDate(4, sqlDate);
-        ResultSet incidentResults = repinsertStmt.executeQuery();
-        System.out.println(incidentResults);
+        Boolean incidentResults = repinsertStmt.execute();
       }
     } catch (SQLException ex) {
       throw new ServletException(
