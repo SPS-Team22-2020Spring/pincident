@@ -32,7 +32,8 @@ L.tileLayer(
     }).addTo(mymap)
 
 const marker = L.marker([-23.5505, -46.633]).addTo(mymap)
-marker.bindPopup('<b>Hello world!</b><br>This is where Valentina is from!').openPopup()
+marker.bindPopup(
+    '<b>Hello world!</b><br>This is where Valentina is from!').openPopup()
 
 // This example adds a search box to a map, using the Google Place Autocomplete
 // feature. People can enter geographical searches. The search box will return a
@@ -56,7 +57,6 @@ function initAutocomplete() {
       console.log("Returned place contains no geometry");
       return;
     }
-    
 
     if (tempMarker) {
       mymap.removeLayer(tempMarker);
@@ -67,103 +67,95 @@ function initAutocomplete() {
     mymap.flyTo(location, 12);
     tempMarker = L.marker(location).addTo(mymap);
 
-    if (document.getElementById('form').clicked == true) {
-      const place = {
-        "name": place.name,
-        "lat": place.lat,
-        "lng": place.lng,
-        "id": place.place_id
-      };
-      savePlaceData(place);
-    }
   });
 }
 
 function submitForm() {
-    let formName = request.getParameter("searchinput");
-    let incidentType = request.getParameter("select-type-incident");
-    let comment = request.getParameter("textarea");
+  let formName = request.getParameter("searchinput");
+  let incidentType = request.getParameter("select-type-incident");
+  let comment = request.getParameter("textarea");
 }
 
-function savePlaceData(place) { 
-//DO A POST REQUEST WITHOUT RELOADING THE PAGE 
-//(Kui and valentina check out my form this is how you send the 
-//data into the servlets and wait for a json response that contains 
-//all the objects as json array objects)
-//The putlocations function puts all the points inside the map
+async function savePlaceData(place) {
 
-$("#filter").submit(function(e){
-    e.preventDefault();
-    $.ajax({
-        url: 'ls',
-        type: 'POST',
-        data: $("#filter").serialize(),
-        success: function(d) {
-           console.log(d);
-           putLocations(d);
-        }
-    })
+  const params = new URLSearchParams();
+  params.append('longitude', place.geometry.location.lng());
+  params.append('latitude', place.geometry.location.lat());
+  params.append('visualidentifier', place.name);
+  params.append('gmapsid', place.place_id);
+
+  const response = await fetch('/Cl', {method: 'POST', body: params})
+  if (response.status === 200) {
+    return response.text();
+  } else {
+    throw 'Error adding location';
+  }
+}
+
+$("#filter").submit(function (e) {
+  e.preventDefault();
+  $.ajax({
+    url: 'ls',
+    type: 'POST',
+    data: $("#filter").serialize(),
+    success: function (d) {
+      console.log(d);
+      putLocations(d);
+    }
+  })
 });
-}
 
-function putLocations(data){
-    var locations = [];
-    for(var i = 0; i< data.length; i++){
-        coords = [];
-        for (const property in data[i]) {
-            if(`${property}` == 'latitude' || `${property}` == 'longitude'){
-                coords.push(data[i][property]);
-            }
-        }
-        locations.push(coords);
+function putLocations(data) {
+  var locations = [];
+  for (var i = 0; i < data.length; i++) {
+    coords = [];
+    for (const property in data[i]) {
+      if (`${property}` == 'latitude' || `${property}` == 'longitude') {
+        coords.push(data[i][property]);
+      }
     }
-    for (var i = 0; i < locations.length; i++) {
-        var marker1 =  L.marker(locations[i]).addTo(mymap);
-        //Here you can add all the info of the reports (later)
+    locations.push(coords);
+  }
+  for (var i = 0; i < locations.length; i++) {
+    var marker1 = L.marker(locations[i]).addTo(mymap);
+    //Here you can add all the info of the reports (later)
+  }
+}
+
+async function sendToPost(e) {
+  var typeReports = $("#select-type-incident option:selected").text();
+  var note = $('#textarea').val()
+  const locationparams = new URLSearchParams();
+  locationparams.append('gmapsid', GmapsID);
+  var locationID;
+  try {
+    locationID = await getLocationID(placeInternal);
+  } catch (e) {
+    console.log(e);
+  }
+
+  console.log(locationID, typeReports, note);
+  // const params = new URLSearchParams();
+  // params.append('locationID', locationID);
+  // params.append('typeReports', typeReports);
+  // params.append('note', note);
+  // fetch('/Cr', {method: 'POST', body: params});
+
+}
+
+async function getLocationID(placeInternal) {
+  const response = await fetch(`/lid?gmapsid=${placeInternal.place_id}`)
+  if (response.status === 200) {
+    return response.text();
+  } else {
+    try {
+      await savePlaceData(placeInternal);
+    } catch (e) {
+      throw e;
     }
+    return getLocationID(placeInternal);
+  }
 }
-
-
-function sendToPost(e) {
-    var typeReports = $( "#select-type-incident option:selected" ).text(); 
-    var note = $('#textarea').val()
-    const locationparams = new URLSearchParams();  
-    locationparams.append('gmapsid', GmapsID);
-    var locationID;
-    locationID = getLocationID(placeInternal);
-    
-    console.log(locationID,typeReports,note);
-    // const params = new URLSearchParams();
-    // params.append('locationID', locationID);
-    // params.append('typeReports', typeReports);
-    // params.append('note', note);
-    // fetch('/Cr', {method: 'POST', body: params});
-
-}
-function getLocationID(placeInternal){
-    $.ajax({
-        url: 'lid',
-        type: 'GET',
-        data: {'gmapsid': placeInternal.place_id},
-        success: function(d) {
-           console.log(d);
-        //    locationID = d;
-        },
-        error: function(xhr,textStatus,err) {
-            // console.log(err);
-            // console.log(textStatus);
-            // console.log(xhr);
-            if (xhr.status == 500){
-                savePlaceData(placeInternal);
-                getLocationID(placeInternal);
-            }
-         //    locationID = d;
-         }
-    });
-    
-
-}
-
 
 $('#form').on('click', function (e) {
   e.preventDefault();
