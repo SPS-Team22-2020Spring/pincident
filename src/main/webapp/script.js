@@ -92,6 +92,23 @@ async function savePlaceData(place) {
   }
 }
 
+async function saveIncidentData(locationID, typeReport, note) {
+
+    const params = new URLSearchParams();
+    params.append('locationID', locationID);
+    params.append('typeReports', typeReport);
+    params.append('note', note);
+  
+    const response = await fetch('/Cr', {method: 'POST', body: params})
+    if (response.status === 200) {
+        return response.text();
+    } else {
+        console.log(response.statusText);
+        throw 'Error adding incident';
+
+    }
+  }
+
 $("#filter").submit(function (e) {
   e.preventDefault();
   $.ajax({
@@ -135,11 +152,13 @@ async function sendToPost(e) {
   }
 
   console.log(locationID, typeReports, note);
-  // const params = new URLSearchParams();
-  // params.append('locationID', locationID);
-  // params.append('typeReports', typeReports);
-  // params.append('note', note);
-  // fetch('/Cr', {method: 'POST', body: params});
+  try {
+    await saveIncidentData(locationID,typeReports,note);
+    console.log("Added!")
+  } catch (e) {
+    throw e;
+    console.log(e)
+  }
 
 }
 
