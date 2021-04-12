@@ -187,6 +187,7 @@ function putLocations(data) {
         marker.on('click', function() {
             let modal = document.querySelector(".modal");
             let closeBtn = document.querySelector(".close-modal");
+            var markerID = locationIDs[i];
 
             modal.style.display = "block";
 
@@ -245,3 +246,33 @@ $('#form').on('click', function (e) {
   e.preventDefault();
   $('#successMessage').show().delay(5000).fadeOut();
 });
+
+function addIncidentsToModal(data) {
+    var locationIDs = [];
+    var typeReports = [];
+    var notes = [];
+    var dates = [];
+    for (var i = 0; i < data.length; i++) {
+        for (const property in data[i]) {
+            switch(property){
+                case "locationID":
+                    locationIDs.push(data[i][property]);
+                break;
+                case "typereport":
+                    typeReports.push(data[i][property]);
+                break;
+                case "notes":
+                    notes.push(data[i][property]);
+                break;
+                case "dates":
+                    dates.push(data[i][property]);
+                break;
+                default:
+                break;
+            }
+        }
+    }
+    for (var i = 0; i < locationIDs.length; i++) {
+        //change header in modal to location name
+    }
+}
