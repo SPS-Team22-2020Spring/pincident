@@ -184,6 +184,22 @@ function putLocations(data) {
         marker.bindPopup(
             '<b>'+visualidentifiers[i]+'</b><br>'+locationIDs[i]).openPopup();
         markers.addLayer(marker);
+        marker.on('click', function() {
+            let modal = document.querySelector(".modal");
+            let closeBtn = document.querySelector(".close-modal");
+
+            modal.style.display = "block";
+
+            closeBtn.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            window.onclick = function(e) {
+                if (e.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        });
     }
     mymap.addLayer(markers);
 }
