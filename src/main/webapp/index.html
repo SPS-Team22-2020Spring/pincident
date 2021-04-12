@@ -16,7 +16,7 @@
     crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
   </head>
-  <body>
+  <body onload="returnIncidentsWhere(16), returnAllLocations()">
     <div id="content">
       <h1>Pincident</h1>
       <p>Description</p>
@@ -48,7 +48,7 @@
               <optgroup label="Level of Danger">
               <option value="none">None Selected</option>
               <option value="all">All reports</option>
-              <option value="warning">1 - 5 reports</option>
+              <option value="warning">2 - 5 reports</option>
               <option value="danger">5 - 10 reports</option>
               <option value="dangerous">10 - 20 reports</option>
               <option value="verydangerous">20 and more reports</option>

@@ -35,13 +35,13 @@ public class LocationsServlet extends HttpServlet {
           incidentsfilter = ">=1";
           break;
         case "warning":
-          incidentsfilter = ">1 AND incidentsmap <=5";
+          incidentsfilter = ">1 AND incidentmap <=5";
           break;
         case "danger":
-          incidentsfilter = ">5 AND incidentsmap <= 10";
+          incidentsfilter = ">5 AND incidentmap <= 10";
           break;
         case "dangerous":
-          incidentsfilter = "> 10 AND incidentsmap <= 20";
+          incidentsfilter = "> 10 AND incidentmap <= 20";
           break;
         case "verydangerous":
           incidentsfilter = ">20";
@@ -69,7 +69,6 @@ public class LocationsServlet extends HttpServlet {
     DataSource pool = (DataSource) request.getServletContext().getAttribute("my-pool");
     try (Connection conn = pool.getConnection()){
       String stmt1 = "SELECT * FROM locations WHERE incidentmap " + incidents + ";";
-      System.out.println(stmt1);
       try (PreparedStatement getalllocationswhere = conn.prepareStatement(stmt1)) {
         ResultSet locations = getalllocationswhere.executeQuery();
         List<Locationob> loc = rstolocobj(locations);
