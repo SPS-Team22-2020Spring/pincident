@@ -113,16 +113,41 @@ $("#filter").submit(function (e) {
         type: 'POST',
         data: $("#filter").serialize(),
         success: function (d) {
-            console.log(d);
+            markers.clearLayers(); //This line is to delete all the past markers 
             putLocations(d);
         }
     })
 });
 
-//delete(nxt);
+async function returnIncidentsWhere(id){
+    const params = new URLSearchParams();
+    params.append('id', id);
+    await fetch('/Ris', {method: 'POST', body: params})
+    .then(res => res.text())
+    .then(body => {
+        try {
+            console.log(JSON.parse(body));
+        } catch {
+            throw Error(body);
+        }
+    })
+}
+
+async function returnAllLocations(){
+    const params = new URLSearchParams();
+    params.append('incidents', "all");
+    await fetch('/ls', {method: 'POST', body: params})
+    .then(res => res.text())
+    .then(body => {
+        try {
+            putLocations(JSON.parse(body));
+        } catch {
+            throw Error(body);
+        }
+    })
+}
 
 function putLocations(data) {
-    markers.clearLayers();
     var locations = [];
     var locationIDs = [];
     var gmapsIDs = [];
@@ -152,7 +177,6 @@ function putLocations(data) {
                 break;
             }
         }
-        console.log(coords);
         locations.push(coords);
     }
     for (var i = 0; i < locations.length; i++) {
