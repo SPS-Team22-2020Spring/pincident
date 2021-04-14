@@ -253,7 +253,15 @@ $('#form').on('click', function (e) {
 });
 
 function addIncidentsToModal(data) {
+  var outerDiv = document.createElement("div");
   data.forEach(datum => {
-    console.log(datum)
+    var innerDiv = document.createElement("div");
+    const header = document.createTextNode(`Incident Type: ${datum.typeReports}`)
+    const note = document.createTextNode(`Notes: ${datum.note}`)
+    innerDiv.append(header);
+    innerDiv.append(note);
+    outerDiv.append(innerDiv)
   })
+  const modalContent = document.getElementById("modal-content")
+  modalContent.append(outerDiv)
 }
