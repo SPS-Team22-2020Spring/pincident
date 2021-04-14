@@ -91,101 +91,123 @@ async function savePlaceData(place) {
 
 async function saveIncidentData(locationID, typeReport, note) {
 
-    const params = new URLSearchParams();
-    params.append('locationID', locationID);
-    params.append('typeReports', typeReport);
-    params.append('note', note);
-  
-    const response = await fetch('/Cr', {method: 'POST', body: params})
-    if (response.status === 200) {
-        return response.text();
-    } else {
-        console.log(response.statusText);
-        throw 'Error adding incident';
+  const params = new URLSearchParams();
+  params.append('locationID', locationID);
+  params.append('typeReports', typeReport);
+  params.append('note', note);
+
+  const response = await fetch('/Cr', {method: 'POST', body: params})
+  if (response.status === 200) {
+    return response.text();
+  } else {
+    console.log(response.statusText);
+    throw 'Error adding incident';
 
     }
-  }
-
-$("#filter").submit(function (e) {
-    e.preventDefault();
-    $.ajax({
-        url: 'ls',
-        type: 'POST',
-        data: $("#filter").serialize(),
-        success: function (d) {
-            markers.clearLayers(); //This line is to delete all the past markers 
-            putLocations(d);
-        }
-    })
-});
-
-async function returnIncidentsWhere(id){
-    const params = new URLSearchParams();
-    params.append('id', id);
-    await fetch('/Ris', {method: 'POST', body: params})
-    .then(res => res.text())
-    .then(body => {
-        try {
-            console.log(JSON.parse(body));
-        } catch {
-            throw Error(body);
-        }
-    })
 }
 
-async function returnAllLocations(){
-    const params = new URLSearchParams();
-    params.append('incidents', "all");
-    await fetch('/ls', {method: 'POST', body: params})
-    .then(res => res.text())
-    .then(body => {
+$("#filter").submit(function (e) {
+  e.preventDefault();
+  $.ajax({
+    url: 'ls',
+    type: 'POST',
+    data: $("#filter").serialize(),
+    success: function (d) {
+      markers.clearLayers(); //This line is to delete all the past markers
+      putLocations(d);
+    }
+  })
+});
+
+async function returnIncidentsWhere(id) {
+  const params = new URLSearchParams();
+  params.append('id', id);
+  deleteAllincidents(); //Clean incidents modal
+  await fetch('/Ris', {method: 'POST', body: params})
+      .then(res => res.text())
+      .then(body => {
         try {
-            putLocations(JSON.parse(body));
+            addIncidentsToModal(JSON.parse(body));
+            // console.log(JSON.parse(body));
         } catch {
-            throw Error(body);
+          throw Error(body);
         }
-    })
+      })
+}
+
+async function returnAllLocations() {
+  const params = new URLSearchParams();
+  params.append('incidents', "all");
+  await fetch('/ls', {method: 'POST', body: params})
+      .then(res => res.text())
+      .then(body => {
+        try {
+          putLocations(JSON.parse(body));
+        } catch {
+          throw Error(body);
+        }
+      })
 }
 
 function putLocations(data) {
     var locations = [];
-    var locationIDs = [];
-    var gmapsIDs = [];
-    var visualidentifiers = [];
-    var incidentmaps = [];
-    for (var i = 0; i < data.length; i++) {
-        var coords = [];
-        for (const property in data[i]) {
-            switch(property){
-                case "locationID":
-                    locationIDs.push(data[i][property]);
-                break;
-                case "latitude":
-                case "longitude":
-                    coords.push(data[i][property]);
-                break;
-                case "gmapsid":
-                    gmapsIDs.push(data[i][property]);
-                break;
-                case "visualidentifier":
-                    visualidentifiers.push(data[i][property]);
-                break;
-                case "incidentmap":
-                    incidentmaps.push(data[i][property]);
-                break;
-                default:
-                break;
-            }
+  var locationIDs = [];
+  var gmapsIDs = [];
+  var visualidentifiers = [];
+  var incidentmaps = [];
+  for (var i = 0; i < data.length; i++) {
+    var coords = [];
+    for (const property in data[i]) {
+      switch (property) {
+        case "locationID":
+          locationIDs.push(data[i][property]);
+          break;
+        case "latitude":
+        case "longitude":
+          coords.push(data[i][property]);
+          break;
+        case "gmapsid":
+          gmapsIDs.push(data[i][property]);
+          break;
+        case "visualidentifier":
+          visualidentifiers.push(data[i][property]);
+          break;
+        case "incidentmap":
+          incidentmaps.push(data[i][property]);
+          break;
+        default:
+          break;
+      }
+    }
+      locations.push(coords);
+  }
+  for (let i = 0; i < locations.length; i++) {
+    const marker = L.marker(locations[i]);
+    marker.bindPopup(
+        '<b>' + visualidentifiers[i] + '</b><br>' + locationIDs[i]).openPopup();
+
+    marker.on('click', function () {
+      returnIncidentsWhere(locationIDs[i])
+      let modal = document.querySelector("#modal");
+      let closeBtn = document.querySelector(".close-modal");
+      document.getElementById("header-text").innerHTML = visualidentifiers[i];
+
+      modal.style.display = "block";
+      modal.style.visibility = "visible"
+      modal.style.opacity = "1"
+      closeBtn.onclick = function () {
+        modal.style.display = "none";
+      }
+
+      window.onclick = function (e) {
+        if (e.target == modal) {
+          modal.style.display = "none";
         }
-        locations.push(coords);
-    }
-    for (var i = 0; i < locations.length; i++) {
-        var marker = L.marker(locations[i]);
-        marker.bindPopup(
-            '<b>'+visualidentifiers[i]+'</b><br>'+locationIDs[i]).openPopup();
-        markers.addLayer(marker);
-    }
-    mymap.addLayer(markers);
+      }
+    });
+    markers.addLayer(marker);
+  }
+  mymap.addLayer(markers);
 }
 
 async function sendToPost(e) {
@@ -202,7 +224,7 @@ async function sendToPost(e) {
 
   console.log(locationID, typeReports, note);
   try {
-    await saveIncidentData(locationID,typeReports,note);
+    await saveIncidentData(locationID, typeReports, note);
     console.log("Added!")
   } catch (e) {
     throw e;
@@ -229,3 +251,28 @@ $('#form').on('click', function (e) {
   e.preventDefault();
   $('#successMessage').show().delay(5000).fadeOut();
 });
+
+function addIncidentsToModal(data) { 
+  var outerDiv = document.createElement("div");
+  data.forEach(datum => {
+    var innerDiv = document.createElement("div");
+    const header = document.createTextNode(`Incident Type: ${datum.typeReports}`)
+    const note = document.createTextNode(`Notes: ${datum.note}`)
+    const date = document.createTextNode(`Date: ${datum.dateTime}`)
+    innerDiv.append(header);
+    innerDiv.appendChild(document.createElement("br"));    
+    innerDiv.append(note);
+    innerDiv.appendChild(document.createElement("br"));
+    innerDiv.append(date);
+    innerDiv.appendChild(document.createElement("br"));
+    innerDiv.appendChild(document.createElement("br"));
+    outerDiv.append(innerDiv);
+  })
+  const modalContent = document.getElementById("modal-content")
+  modalContent.append(outerDiv);
+} 
+
+function deleteAllincidents(){
+    const modalContent = document.getElementById("modal-content")
+    modalContent.querySelectorAll('*').forEach(n => n.remove());
+}
