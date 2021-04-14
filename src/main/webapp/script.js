@@ -189,7 +189,7 @@ function putLocations(data) {
       returnIncidentsWhere(locationIDs[i])
       let modal = document.querySelector("#modal");
       let closeBtn = document.querySelector(".close-modal");
-      const markerID = locationIDs[i];
+      document.getElementById("header-text").innerHTML = visualidentifiers[i];
 
       modal.style.display = "block";
       modal.style.visibility = "visible"
@@ -252,16 +252,22 @@ $('#form').on('click', function (e) {
   $('#successMessage').show().delay(5000).fadeOut();
 });
 
-function addIncidentsToModal(data) {
+function addIncidentsToModal(data) { 
   var outerDiv = document.createElement("div");
   data.forEach(datum => {
     var innerDiv = document.createElement("div");
     const header = document.createTextNode(`Incident Type: ${datum.typeReports}`)
     const note = document.createTextNode(`Notes: ${datum.note}`)
+    const date = document.createTextNode(`Date: ${datum.dateTime}`)
     innerDiv.append(header);
+    innerDiv.appendChild(document.createElement("br"));    
     innerDiv.append(note);
-    outerDiv.append(innerDiv)
+    innerDiv.appendChild(document.createElement("br"));
+    innerDiv.append(date);
+    innerDiv.appendChild(document.createElement("br"));
+    innerDiv.appendChild(document.createElement("br"));
+    outerDiv.append(innerDiv);
   })
   const modalContent = document.getElementById("modal-content")
-  modalContent.append(outerDiv)
+  modalContent.append(outerDiv);
 }
