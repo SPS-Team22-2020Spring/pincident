@@ -126,7 +126,8 @@ async function returnIncidentsWhere(id) {
       .then(res => res.text())
       .then(body => {
         try {
-          console.log(JSON.parse(body));
+          addIncidentsToModal(JSON.parse(body));
+          // console.log(JSON.parse(body));
         } catch {
           throw Error(body);
         }
@@ -185,6 +186,7 @@ function putLocations(data) {
         '<b>' + visualidentifiers[i] + '</b><br>' + locationIDs[i]).openPopup();
 
     marker.on('click', function () {
+      returnIncidentsWhere(locationIDs[i])
       let modal = document.querySelector("#modal");
       let closeBtn = document.querySelector(".close-modal");
       const markerID = locationIDs[i];
@@ -251,31 +253,7 @@ $('#form').on('click', function (e) {
 });
 
 function addIncidentsToModal(data) {
-  var locationIDs = [];
-  var typeReports = [];
-  var notes = [];
-  var dates = [];
-  for (var i = 0; i < data.length; i++) {
-    for (const property in data[i]) {
-      switch (property) {
-        case "locationID":
-          locationIDs.push(data[i][property]);
-          break;
-        case "typereport":
-          typeReports.push(data[i][property]);
-          break;
-        case "notes":
-          notes.push(data[i][property]);
-          break;
-        case "dates":
-          dates.push(data[i][property]);
-          break;
-        default:
-          break;
-      }
-    }
-  }
-  for (var i = 0; i < locationIDs.length; i++) {
-    //change header in modal to location name
-  }
+  data.forEach(datum => {
+    console.log(datum)
+  })
 }
