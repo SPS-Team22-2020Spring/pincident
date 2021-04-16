@@ -136,6 +136,7 @@ async function returnIncidentsWhere(id) {
 }
 
 async function returnAllLocations() {
+  markers.clearLayers(); //This line is to delete all the past markers
   const params = new URLSearchParams();
   params.append('incidents', "all");
   await fetch('/ls', {method: 'POST', body: params})
@@ -226,6 +227,8 @@ async function sendToPost(e) {
   try {
     await saveIncidentData(locationID, typeReports, note);
     console.log("Added!")
+    console.log("Refreshing map!")
+    returnAllLocations();
   } catch (e) {
     throw e;
     console.log(e)
@@ -275,4 +278,19 @@ function addIncidentsToModal(data) {
 function deleteAllincidents(){
     const modalContent = document.getElementById("modal-content")
     modalContent.querySelectorAll('*').forEach(n => n.remove());
+}
+
+function openNav() {
+  document.getElementById("mySidebar").style.width = "250px";
+  document.getElementById("main").style.marginLeft = "250px";
+}
+
+function closeNav() {
+  document.getElementById("mySidebar").style.width = "0";
+  document.getElementById("main").style.marginLeft= "0";
+}
+
+function darkMode() {
+   var element = document.body;
+   element.classList.toggle("dark-mode");
 }
