@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
     <title>Pincident</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
@@ -16,113 +16,106 @@
     crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
   </head>
-  <body onload="returnIncidentsWhere(16), returnAllLocations()">
-    <div id="content">
-      <h1>Pincident</h1>
-      <p>Description</p>
-      <div class="map description container">
-        <div class="row align-items-center">
-          <div class="col-4">
-            <h4>Types of Incidents</h4>
-            <ul class="types-incidents">
-              <li><span class="material-icons">error</span> Race</li>
-              <li><span class="material-icons">error</span> Nationality</li>
-              <li><span class="material-icons">error</span> Sexuality</li>
-              <li><span class="material-icons">error</span> Religion</li>
-              <li><span class="material-icons">error</span> Gender</li>
-            </ul>
-          </div>
-          <div id="mapid" class="col-8">
-
-          </div>
+  <body onload="returnAllLocations()">
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <h1>Pincident</h1>
+        <div>
+            <div>
+                <form class="incidents-form" onsubmit="submitForm()">
+                    <!-- Form Name -->
+                    <!-- Search input-->
+                    <div class="form-group">
+                        <label for="searchinput">Name of establishment</label>
+                        <div>
+                            <input id="searchinput" name="searchinput" type="search" placeholder="Joe's Diner"
+                                class="form-control input-md">
+                            <p class="help-block">e.g. "Joe's Diner"</p>
+                        </div>
+                    </div>
+        
+                    <!-- Select Basic -->
+                    <div class="form-group">
+                        <label for="select-type-incident">Type of Incident</label>
+                        <div>
+                            <select id="select-type-incident" name="select-type-incident" class="form-control">
+                                <option value="Gender">Gender</option>
+                                <option value="Race">Race</option>
+                                <option value="Nationality">Nationality</option>
+                                <option value="Religion">Religion</option>
+                                <option value="Sexuality">Sexuality</option>
+                            </select>
+                        </div>
+                    </div>
+        
+                    <!-- Textarea -->
+                    <div class="form-group">
+                        <label class="control-label" for="textarea" placeholder="Comments/Notes"></label>
+                        <div>
+                            <textarea class="form-control" id="textarea" name="textarea"
+                                placeholder="Want to share some details?"></textarea>
+                        </div>
+                    </div>
+        
+                    <!-- Button -->
+                    <div class="form-group">
+                        <label class="control-label" for="form"></label>
+                        <div>
+                            <button class="btn btn-success"id="form" name="form" onclick="sendToPost()">Add a new Pin!</button>
+                        </div>
+                    </div>
+                </form>
+                <p id="successMessage" class="successmessage">Your pin was added to our database!</p>
+        
+            </div>
+        </div>
+    </div>
+    <div id="main">
+        <button class="btn btn-success" onclick="openNav()"><h2>☰</h2></button>  
+        <div class="map">
+            <div id="mapid">
+        
+            </div>
         </div>
 
-      </div>
-      
-      <!--FILTER AREA-->
-      <div class="row justify-content-center">
-        <form id="filter" method="post" class="col-md-12 justify-content-center incidents-form">
-          <label for="TypeReports">Search via locations:</label>
-          <br>
-          <select name="incidents" id="incidents">
-              <optgroup label="Level of Danger">
-              <option value="none">None Selected</option>
-              <option value="all">All reports</option>
-              <option value="warning">2 - 5 reports</option>
-              <option value="danger">5 - 10 reports</option>
-              <option value="dangerous">10 - 20 reports</option>
-              <option value="verydangerous">20 and more reports</option>
-          </select>
-          <br>
-          <input type="submit" value="Filter">
-        </form>
-      </div>
-      <div class="row align-items-center justify-content-center">
-        <div class="col-sm-12 align-self-center">
-          <form class="form-horizontal incidents-form" onsubmit="submitForm()">
-            
-            <!-- Form Name -->
-            <h3>Drop a Pin!</h3>
-            
-            <!-- Search input-->
-            <div class="form-group">
-              <label class="col-md-4 control-label" for="searchinput">Name of establishment</label>
-              <div class="col-md-4 col-centered">
-                <input id="searchinput" name="searchinput" type="search" placeholder="Joe's Diner" class="form-control input-md">
-                <p class="help-block">e.g. "Joe's Diner"</p>
-              </div>
-            </div>
-
-            <!-- Select Basic -->
-            <div class="form-group">
-              <label class="col-md-4 control-label" for="select-type-incident">Type of Incident</label>
-              <div class="col-md-4 col-centered">
-                <select id="select-type-incident" name="select-type-incident" class="form-control">
-                  <option value="Gender">Gender</option>
-                  <option value="Race">Race</option>
-                  <option value="Nationality">Nationality</option>
-                  <option value="Religion">Religion</option>
-                  <option value="Sexuality">Sexuality</option>
+        <!--FILTER AREA-->
+        <div class="row justify-content-center">
+            <form id="filter" method="post" class="col-md-12 justify-content-center incidents-form">
+                <label for="TypeReports">Search by number of incidents:</label>
+                <br>
+                <select name="incidents" class="btn btn-info" id="incidents">
+                    <optgroup label="Level of Danger">
+                        <option value="none">None Selected</option>
+                        <option value="all">All reports</option>
+                        <option value="warning">2 - 5 reports</option>
+                        <option value="danger">5 - 10 reports</option>
+                        <option value="dangerous">10 - 20 reports</option>
+                        <option value="verydangerous">20 and more reports</option>
                 </select>
-              </div>
-            </div>
-            
-            <!-- Textarea -->
-            <div class="form-group">
-              <label class="col-md-4 control-label" for="textarea" placeholder="Comments/Notes"></label>
-              <div class="col-md-4 col-centered">                     
-                <textarea class="form-control" id="textarea" name="textarea" placeholder="Want to share some details?"></textarea>
-              </div>
-            </div>
-            
-            <!-- Button -->
-            <div class="form-group">
-              <label class="col-md-4 control-label" for="form"></label>
-              <div class="col-md-4 col-centered">
-                <button id="form" name="form" onclick="sendToPost()">Drop a Pin!</button>
-              </div>
-            </div>
-          </form>
-          <p id="successMessage" class="successmessage">Your pin was added to our database!</p>
-            
+                <input class="btn btn-success" type="submit" value="Filter">
+            </form>
+            <br>
+            <br>
+            <br>
+            <br>
+            <button class="btn btn-dark" onclick="darkMode()">Toggle dark mode</button>
         </div>
-      </div>
-      <div class="modal" id="modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-scrollable" role="document">
-          <div class="modal-content">
-            <header class="modal-header-info">
-                <h1 class="header-text" id="header-text"></h1>
-                <button class="close-modal" aria-label="close modal" data-close>
-                    ✕
-                </button>
-            </header>
-            <div class="modal-body">
-                <section class="modal-content" id="modal-content">
-                </section>
+        <div class="modal" id="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <header class="modal-header-info">
+                        <h1 class="header-text" id="header-text"></h1>
+                        <button class="close-modal" aria-label="close modal" data-close>
+                            ✕
+                        </button>
+                    </header>
+                    <div class="modal-body">
+                        <section class="modal-content" id="modal-content">
+                        </section>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
   </body>
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
